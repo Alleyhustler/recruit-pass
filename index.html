@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruit Pass | Solana Airdrop System</title>
+    
+    <!-- Modern Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --solana-purple: #9945FF;
+            --solana-green: #14F195;
+            --bg-dark: #000000;
+            --glass-bg: rgba(20, 20, 20, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-sec: #9ca3af;
+            --glow: 0 0 120px -20px rgba(153, 69, 255, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: url('a.png'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: var(--text-main);
+  font-family: "Barriecito", system-ui;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Vignette & Overlay for legibility */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.95) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- Header --- */
+        header {
+              font-family: "Slackey", sans-serif;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 5%;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            height: 48px;
+            width: auto;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+        }
+
+        .title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .social-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 10px 20px;
+            border-radius: 99px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--text-main);
+            transform: translateY(-1px);
+        }
+
+        /* --- Main Layout --- */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Ambient Glow behind card */
+        .glow-bg {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--solana-purple) 0%, rgba(0,0,0,0) 70%);
+            opacity: 0.2;
+            z-index: -1;
+            filter: blur(80px);
+            animation: pulse 6s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.15; transform: scale(0.9); }
+            100% { opacity: 0.25; transform: scale(1.1); }
+        }
+
+        /* Glass Card */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            text-align: center;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 12px;
+              font-family: "Slackey", sans-serif;
+
+        }
+
+        h2 { font-size: 2rem; }
+        
+        p {
+            color: var(--text-sec);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* --- Components --- */
+        
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 18px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, #c2aa23, #ffa61b);
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 221, 69, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(255, 181, 69, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--solana-green);
+            color: var(--solana-green);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(20, 241, 149, 0.1);
+            box-shadow: 0 0 20px rgba(20, 241, 149, 0.2);
+        }
+
+        /* Dashboard Stats */
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 16px;
+            border-radius: 16px;
+            text-align: left;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-sec);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .stat-val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .status-locked { color: #ef4444; text-shadow: 0 0 10px rgba(239, 68, 68, 0.3); }
+        .status-unlocked { color: var(--solana-green); text-shadow: 0 0 10px rgba(20, 241, 149, 0.3); }
+
+        /* Referral Box */
+        .referral-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 6px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .referral-input {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            width: 100%;
+            padding: 10px 14px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            opacity: 0.8;
+        }
+
+        .copy-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .copy-btn:hover { background: rgba(255,255,255,0.2); }
+
+        /* Helpers */
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeInUp 0.5s forwards; }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
+        }
+        
+        .badge-locked {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .badge-success {
+            background: rgba(20, 241, 149, 0.1);
+            color: var(--solana-green);
+            border: 1px solid rgba(20, 241, 149, 0.2);
+        }
+
+        .wallet-pill {
+            background: rgba(0,0,0,0.5);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-sec);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            border: 1px solid var(--glass-border);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="brand">
+            <!-- Ensure logo.png exists in your folder -->
+            <img src="logo.png" alt="Recruit Pass" class="logo" onerror="this.style.display='none'"> 
+            <span class="title">RECRUIT PASS</span>
+        </div>
+        <a href="https://twitter.com" target="_blank" class="social-btn">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            Follow
+        </a>
+    </header>
+
+    <main>
+        <div class="glow-bg"></div>
+
+        <!-- VIEW 1: CONNECT WALLET -->
+        <div id="connect-view" class="glass-panel">
+            <h2>Access Airdrop</h2>
+            <p>Connect your Solana wallet to check your allocation. Referrals are required to unlock liquidity.
+                Don't you worry trenches i wont drain you ":)"
+            </p>
+            <button class="btn-primary" onclick="connectWallet()">
+                Connect Wallet
+            </button>
+            <div style="margin-top: 15px; font-size: 0.8rem; color: #555;">
+                Supports Phantom, Solflare
+            </div>
+        </div>
+
+        <!-- VIEW 2: DASHBOARD (Holder) -->
+        <div id="dashboard-view" class="glass-panel hidden">
+            <div id="status-badge" class="badge badge-locked">Withdrawals Locked</div>
+            
+            <div class="wallet-pill" id="user-wallet-display">...</div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <span class="stat-label">Allocation</span>
+                    <div class="stat-val">5,000 $PASS</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Unlock Status</span>
+                    <div id="unlock-status-text" class="stat-val status-locked">PENDING</div>
+                </div>
+            </div>
+
+            <div id="referral-section">
+                <p style="margin-bottom: 12px;">Refer 1 new participant to unlock.</p>
+                
+                <div class="referral-container">
+                    <input type="text" id="ref-link" class="referral-input" readonly value="...">
+                    <button class="copy-btn" onclick="copyLink()">COPY</button>
+                </div>
+                
+                <!-- Only for testing -->
+                <button onclick="simulateUnlock()" style="background:none; border:none; color:#333; font-size:10px; margin-top:10px; cursor:pointer;">[DEV: Simulate Success]</button>
+            </div>
+
+            <div id="claim-section" class="hidden">
+                <p style="color: var(--solana-green); margin-bottom: 20px;">Criteria Met. Allocation Unlocked.</p>
+                <button class="btn-primary" onclick="alert('Transaction Signed. Tokens claiming...')">CLAIM AIRDROP</button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: RECRUIT (Visitor) -->
+        <div id="recruit-view" class="glass-panel hidden">
+            <div class="badge badge-locked" style="background:rgba(153, 69, 255, 0.2); color: #c4b5fd; border-color: #7c3aed">Recruit Invite</div>
+            <h2>Join the Network</h2>
+            <p>You have been invited by <span id="referrer-display" style="color:white; font-family:'Space Grotesk'"></span>. Sign the confirmation to secure your spot.</p>
+
+            <button class="btn-primary" onclick="confirmRecruit()">
+                Confirm & Join
+            </button>
+        </div>
+
+        <!-- VIEW 4: SUCCESS -->
+        <div id="success-view" class="glass-panel hidden">
+            <h2 style="color: var(--solana-green)">Welcome Aboard</h2>
+            <p>Your entry is confirmed. The referrer's pass has been updated. You can now access your own dashboard.</p>
+            <button class="btn-primary" onclick="window.location.href = window.location.pathname">
+                Open My Dashboard
+            </button>
+        </div>
+
+    </main>
+
+    <script>
+        // --- State ---
+        let walletAddress = null;
+        let isRecruit = false;
+        let referrer = null;
+
+        // --- Init ---
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            referrer = params.get('ref');
+
+            if(referrer) {
+                isRecruit = true;
+                // If user is a recruit, we show connect screen, but logic directs to Recruit View after connection
+            }
+        });
+
+        // --- Solana Logic ---
+        async function connectWallet() {
+            // Check for Solana Object
+            const { solana } = window;
+
+            if (solana && solana.isPhantom) {
+                try {
+                    const response = await solana.connect();
+                    walletAddress = response.publicKey.toString();
+                    handleConnectionSuccess();
+                } catch (err) {
+                    console.error(err);
+                    alert("Connection rejected.");
+                }
+            } else {
+                // For demo purposes, if no wallet, we mock it so you can see the UI
+                const mockParams = confirm("Phantom wallet not detected. Use Dev Mode (Mock Wallet)?");
+                if(mockParams) {
+                    walletAddress = "8xHt...9jKm"; // Mock SOL address
+                    handleConnectionSuccess();
+                } else {
+                    window.open("https://phantom.app/", "_blank");
+                }
+            }
+        }
+
+        function handleConnectionSuccess() {
+            // Hide Connect Screen
+            document.getElementById('connect-view').classList.add('hidden');
+
+            if (isRecruit) {
+                // Show Recruit Confirmation
+                document.getElementById('recruit-view').classList.remove('hidden');
+                document.getElementById('recruit-view').classList.add('fade-in');
+                // Truncate referrer for display
+                const shortRef = referrer.slice(0, 4) + '...' + referrer.slice(-4);
+                document.getElementById('referrer-display').innerText = shortRef;
+            } else {
+                // Show Holder Dashboard
+                showDashboard();
+            }
+        }
+
+        function showDashboard() {
+            const dashboard = document.getElementById('dashboard-view');
+            dashboard.classList.remove('hidden');
+            dashboard.classList.add('fade-in');
+
+            // Set Wallet Display
+            const shortWallet = walletAddress.length > 10 
+                ? walletAddress.slice(0, 4) + '...' + walletAddress.slice(-4) 
+                : walletAddress;
+            document.getElementById('user-wallet-display').innerText = shortWallet;
+
+            // Generate Ref Link
+            const baseUrl = window.location.origin + window.location.pathname;
+            const refLink = `${baseUrl}?ref=${walletAddress}`;
+            document.getElementById('ref-link').value = refLink;
+        }
+
+        // --- Interactions ---
+
+        function confirmRecruit() {
+            // Logic: Send transaction/signature to backend to confirm referral
+            // Visuals:
+            document.getElementById('recruit-view').classList.add('hidden');
+            document.getElementById('success-view').classList.remove('hidden');
+            document.getElementById('success-view').classList.add('fade-in');
+        }
+
+        function copyLink() {
+            const input = document.getElementById('ref-link');
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value);
+            
+            const btn = document.querySelector('.copy-btn');
+            const original = btn.innerText;
+            btn.innerText = "COPIED";
+            btn.style.background = "var(--solana-green)";
+            btn.style.color = "black";
+            
+            setTimeout(() => {
+                btn.innerText = original;
+                btn.style.background = "";
+                btn.style.color = "";
+            }, 2000);
+        }
+
+        // --- DEV ONLY: Simulate the unlock state ---
+        function simulateUnlock() {
+            const statusBadge = document.getElementById('status-badge');
+            statusBadge.innerText = "UNLOCKED";
+            statusBadge.className = "badge badge-success"; // Turn green
+
+            const statusText = document.getElementById('unlock-status-text');
+            statusText.innerText = "READY";
+            statusText.className = "stat-val status-unlocked";
+
+            document.getElementById('referral-section').classList.add('hidden');
+            document.getElementById('claim-section').classList.remove('hidden');
+            document.getElementById('claim-section').classList.add('fade-in');
+        }
+
+    </script>
+</body>
+</html>
